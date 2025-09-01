@@ -63,6 +63,15 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
+			backgroundImage: {
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-card': 'var(--gradient-card)',
+				'gradient-warm': 'var(--gradient-warm)'
+			},
+			boxShadow: {
+				'recipe': 'var(--shadow-recipe)',
+				'ingredient': 'var(--shadow-ingredient)'
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
