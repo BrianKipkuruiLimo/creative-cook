@@ -82,14 +82,59 @@ const Index = () => {
       duration: 5000,
     });
 
-    // Simulate loading
+    // Simulate loading and generate new recipes
     setTimeout(() => {
+      const newRecipes = generateMockRecipes(ingredients);
+      setRecipes(newRecipes);
       setIsLoading(false);
       toast({
-        title: "Demo Recipes Loaded",
-        description: `Showing sample recipes with your ${ingredients.length} ingredients!`,
+        title: "Demo Recipes Generated",
+        description: `Generated ${newRecipes.length} new recipes with your ${ingredients.length} ingredients!`,
       });
     }, 2000);
+  };
+
+  const generateMockRecipes = (ingredients: string[]) => {
+    const recipeTemplates = [
+      {
+        title: `${ingredients[0] || 'Mystery'} Delight Bowl`,
+        description: `A delicious and nutritious bowl featuring ${ingredients.slice(0, 3).join(', ')}`,
+        cookTime: "20 mins",
+        servings: 2,
+        difficulty: "Easy" as const
+      },
+      {
+        title: `${ingredients[1] || 'Special'} Fusion Dish`,
+        description: `An innovative fusion combining ${ingredients.slice(1, 4).join(', ')} with aromatic spices`,
+        cookTime: "30 mins", 
+        servings: 4,
+        difficulty: "Medium" as const
+      },
+      {
+        title: `Quick ${ingredients[2] || 'Surprise'} Stir-Fry`,
+        description: `Fast and flavorful stir-fry with ${ingredients.slice(0, 4).join(', ')}`,
+        cookTime: "15 mins",
+        servings: 3,
+        difficulty: "Easy" as const
+      }
+    ];
+
+    return recipeTemplates.map((template, index) => ({
+      id: `generated-${Date.now()}-${index}`,
+      title: template.title,
+      description: template.description,
+      ingredients: ingredients.slice(0, Math.min(5, ingredients.length)),
+      instructions: [
+        `Prepare all your ${ingredients.length} ingredients by washing and chopping as needed`,
+        `Heat oil in a large pan over medium-high heat`,
+        `Add ${ingredients[0] || 'main ingredient'} and cook until tender`,
+        `Stir in remaining ingredients: ${ingredients.slice(1, 3).join(', ')}`,
+        `Season to taste and serve hot while fresh`
+      ],
+      cookTime: template.cookTime,
+      servings: template.servings,
+      difficulty: template.difficulty
+    }));
   };
 
   return (
