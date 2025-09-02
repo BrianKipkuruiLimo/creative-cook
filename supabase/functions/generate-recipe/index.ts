@@ -1,5 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import "https://deno.land/std@0.168.0/dotenv/load.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+// ...existing code...
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -15,6 +17,14 @@ serve(async (req) => {
   }
 
   try {
+    if (!openAIApiKey) {
+      console.error('Missing OpenAI API key');
+      return new Response(JSON.stringify({ error: 'Missing OpenAI API key' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     const { ingredients, preferences } = await req.json();
     
     if (!ingredients || ingredients.length === 0) {
@@ -45,7 +55,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o', // <-- FIXED MODEL NAME
         messages: [
           { 
             role: 'system', 
@@ -59,14 +69,16 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      console.error('OpenAI API error:', response.status, response.statusText);
-      return new Response(JSON.stringify({ error: 'Failed to generate recipe' }), {
+      const errorText = await response.text();
+      console.error('OpenAI API error:', response.status, response.statusText, errorText);
+      return new Response(JSON.stringify({ error: 'Failed to generate recipe', details: errorText }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     const data = await response.json();
+    console.log('OpenAI response:', data); // <-- LOG RESPONSE FOR DEBUGGING
     const generatedContent = data.choices[0].message.content;
     
     try {
@@ -84,7 +96,7 @@ serve(async (req) => {
       console.error('Error parsing generated recipe:', parseError);
       console.error('Generated content:', generatedContent);
       
-      return new Response(JSON.stringify({ error: 'Failed to parse generated recipe' }), {
+      return new Response(JSON.stringify({ error: 'Failed to parse generated recipe', details: generatedContent }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
