@@ -195,9 +195,9 @@ const Index = () => {
         {/* Recent Recipes */}
         <section className="space-y-6">
           <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold text-foreground">Sample Recipes</h2>
+            <h2 className="text-3xl font-bold text-foreground">Your Recipes</h2>
             <p className="text-muted-foreground">
-              Here's what our AI can create for you (connect Supabase for live generation!)
+              Discover amazing recipes created just for you
             </p>
           </div>
           
@@ -211,17 +211,6 @@ const Index = () => {
             ))}
           </div>
         </section>
-
-        {/* CTA Section */}
-        <div className="text-center py-16 space-y-6">
-          <h2 className="text-3xl font-bold text-foreground">Ready to Start Cooking?</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Connect your project to Supabase to unlock AI-powered recipe generation, user accounts, and recipe storage.
-          </p>
-          <Button size="lg" className="bg-gradient-hero text-primary-foreground font-semibold px-8 py-3">
-            Connect Supabase to Get Started
-          </Button>
-        </div>
       </div>
 
       {/* Recipe Detail Modal */}
